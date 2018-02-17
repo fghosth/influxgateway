@@ -1,0 +1,71 @@
+bind: ":8080"
+#访问服务的用户名密码
+user: derek
+password: "111111"
+#最大连接数
+maxconn: 100000
+#日志记录到influxdb
+loginflux:
+  printscreen: false
+  keys:
+    - component
+    - level
+    - method
+  addr:      "http://ec2-user@adcsg001.hemin.im:8086"
+  user:      "derek"
+  passwd:    "zaqwedcxs"
+  database:  "serverInfo"
+  table:     "logs"
+  precision: "ms"
+  buff:      30
+  tags:        #tags属性
+   server: "localhost"
+   service: "indbgateway"
+#以下参数不重启生效
+# 缓存数量
+buffer: 2000
+#轮询算法 1为nginx的平滑加权轮询，2为lvs的快速加权轮询
+poll: 2
+
+#服务器组 可不重启生效num从1开始  num是重要的配置不能随意改动
+db:
+ - group1:
+   - num: 1
+   - server :
+     - server:
+       - addr: http://ec2-13-250-24-107.ap-southeast-1.compute.amazonaws.com:8086
+       - username: derek
+       - password: "zaqwedcxs"
+       - dbname: tracking
+       - precision: ms
+       - weight: 10
+ - group2:
+   - num: 2
+   - server :
+     - server:
+       - addr: http://ec2-54-179-154-194.ap-southeast-1.compute.amazonaws.com:8086
+       - username: derek
+       - password: "zaqwedcxs"
+       - dbname: tracking
+       - precision: ms
+       - weight: 1
+ - group3:
+   - num: 3
+   - server :
+     - server:
+       - addr: http://ec2-54-254-232-195.ap-southeast-1.compute.amazonaws.com:8086
+       - username: derek
+       - password: "zaqwedcxs"
+       - dbname: tracking
+       - precision: ms
+       - weight: 1
+ - group4:
+   - num: 4
+   - server :
+     - server:
+       - addr: http://ec2-54-179-143-113.ap-southeast-1.compute.amazonaws.com:8086
+       - username: derek
+       - password: "zaqwedcxs"
+       - dbname: tracking
+       - precision: ms
+       - weight: 1

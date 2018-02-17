@@ -1,0 +1,9 @@
+port: ":8000"
+inflxudb:
+  addr: http://localhost:8086
+  username: derek
+  password: "123456"
+  dbname: serverInfo
+  precision: ns
+# 缓存数量 只有buffer可以不从启生效
+buffer: 2

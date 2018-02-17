@@ -1,0 +1,101 @@
+bind: ":8080"
+#访问服务的用户名密码
+user: derek
+password: "111111"
+#最大连接数
+maxconn: 100
+#日志等级 all debug info  error
+loglevel: all
+#日志记录到influxdb
+loginflux:
+  printscreen: true
+  keys:
+    - component
+    - level
+    - method
+  addr:      "http://localhost:8086"
+  user:      "derek"
+  passwd:    "123456"
+  database:  "serverInfo"
+  table:     "logs"
+  precision: "ms"
+  buff:      2
+  tags:        #tags属性
+   server: "localhost"
+   service: "indbgateway"
+#以下参数不重启生效
+# 缓存数量
+buffer: 2
+#轮询算法 1为nginx的平滑加权轮询，2为lvs的快速加权轮询
+poll: 2
+
+#服务器组 可不重启生效num从1开始  num是重要的配置不能随意改动
+db:
+ - group1:
+   - num: 1
+   - server :
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 10
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 5
+ - group2:
+   - num: 2
+   - server :
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 1
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 1
+ - group3:
+   - num: 3
+   - server :
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 1
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 1
+ - group4:
+   - num: 4
+   - server :
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 1
+     - server:
+       - addr: http://localhost:8086
+       - username: derek
+       - password: "123456"
+       - dbname: serverInfo
+       - precision: ms
+       - weight: 1
