@@ -4,6 +4,8 @@ user: derek
 password: "111111"
 #最大连接数
 maxconn: 100000
+#日志等级 all debug info  error
+loglevel: all
 #日志记录到influxdb
 loginflux:
   printscreen: false
@@ -11,7 +13,7 @@ loginflux:
     - component
     - level
     - method
-  addr:      "http://ec2-user@adcsg001.hemin.im:8086"
+  addr:      "http://adcsg001.hemin.im:8086"
   user:      "derek"
   passwd:    "zaqwedcxs"
   database:  "serverInfo"

@@ -176,16 +176,19 @@ func (s serverRoute) Query(cmd, db, precision string, uid []uint64) (res []Query
 		}).Debugln("调试信息")
 		//查询
 		result, err := conn.Query(cmd, db, precision)
+
 		if err != nil {
 			util.Log.WithFields(logrus.Fields{
 				"err":   err,
 				"group": num,
-			}).Infoln("执行命令失败")
+			}).Error("执行命令失败")
+			return res, err
 		} else {
 			r := QueryResult{uid[i], result}
 			res = append(res, r)
 		}
 	}
+
 	return
 }
 

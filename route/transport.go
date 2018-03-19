@@ -9,13 +9,11 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/golang/time/rate"
 	"github.com/gorilla/mux"
 	// "golang.org/x/time/rate"
 	"github.com/go-kit/kit/auth/basic"
 	kitlog "github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	"github.com/go-kit/kit/ratelimit"
 	kithttp "github.com/go-kit/kit/transport/http"
 	"jvole.com/influx/db"
 	"jvole.com/influx/middleware"
@@ -37,7 +35,7 @@ func MakeHandler(bs ServerRoute, logger *kitlog.Logger) http.Handler {
 	e := makeInsertNowEndpoint(bs)
 	e = basic.AuthMiddleware(User, Password, "")(e)
 	e = middleware.ValidMiddleware()(e)
-	e = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(e)
+	// e = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(e)
 	InsertNowHandler := kithttp.NewServer(
 		e,
 		decodeInsertNowRequest,
@@ -47,7 +45,7 @@ func MakeHandler(bs ServerRoute, logger *kitlog.Logger) http.Handler {
 	eib := makeInsertBatchEndpoint(bs)
 	eib = basic.AuthMiddleware(User, Password, "")(eib)
 	eib = middleware.ValidMiddleware()(eib)
-	eib = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(eib)
+	// eib = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(eib)
 	InsertBatchHandler := kithttp.NewServer(
 		eib,
 		decodeInsertBatchRequest,
@@ -57,7 +55,7 @@ func MakeHandler(bs ServerRoute, logger *kitlog.Logger) http.Handler {
 	es := makeSelectEndpoint(bs)
 	es = basic.AuthMiddleware(User, Password, "")(es)
 	es = middleware.ValidMiddleware()(es)
-	es = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(es)
+	// es = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(es)
 	SelectHandler := kithttp.NewServer(
 		es,
 		decodeSelectRequest,
@@ -67,7 +65,7 @@ func MakeHandler(bs ServerRoute, logger *kitlog.Logger) http.Handler {
 	ei := makeInsertEndpoint(bs)
 	ei = basic.AuthMiddleware(User, Password, "")(ei)
 	ei = middleware.ValidMiddleware()(ei)
-	ei = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(ei)
+	// ei = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(ei)
 	InsertHandler := kithttp.NewServer(
 		ei,
 		decodeInsertRequest,
@@ -77,7 +75,7 @@ func MakeHandler(bs ServerRoute, logger *kitlog.Logger) http.Handler {
 	ed := makeDeleteEndpoint(bs)
 	ed = basic.AuthMiddleware(User, Password, "")(ed)
 	ed = middleware.ValidMiddleware()(ed)
-	ed = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(ed)
+	// ed = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(ed)
 	DeleteHandler := kithttp.NewServer(
 		ed,
 		decodeDeleteRequest,
@@ -87,7 +85,7 @@ func MakeHandler(bs ServerRoute, logger *kitlog.Logger) http.Handler {
 	eq := makeQueryEndpoint(bs)
 	eq = basic.AuthMiddleware("fghosth", "zaq1xsw2CDE#", "")(eq)
 	eq = middleware.ValidMiddleware()(eq)
-	eq = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(eq)
+	// eq = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), qps))(eq)
 	QueryHandler := kithttp.NewServer(
 		eq,
 		decodeQueryRequest,

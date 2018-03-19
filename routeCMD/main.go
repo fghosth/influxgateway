@@ -15,6 +15,7 @@ import (
 	"github.com/k0kubun/pp"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/spf13/viper"
 	"golang.org/x/net/netutil"
 	"jvole.com/influx/db"
 	"jvole.com/influx/loginflux"
@@ -51,10 +52,10 @@ func main() {
 		fmt.Println("找不到配置文件，请加参数,eg：-f /etc/server.yaml")
 		os.Exit(0)
 	}
-	serv := cfg.logsev
+	// serv := cfg.logsev
 
-	lf := loginflux.NewLoginflux(serv)
-	util.KitLogger = log.NewJSONLogger(log.NewSyncWriter(lf))
+	// lf := loginflux.NewLoginflux(serv)
+	util.KitLogger = log.NewJSONLogger(log.NewSyncWriter(os.Stdout))
 	// util.KitLogger = log.NewJSONLogger(os.Stdout)
 	pp.Println(cfg.loglevel)
 	switch cfg.loglevel {
@@ -129,6 +130,7 @@ func accessControl(h http.Handler) http.Handler {
 }
 
 func loadConfig(file string) {
+	util.Viper = viper.New()
 	util.Viper.SetConfigType("yaml")
 	// util.Viper.SetConfigName(".cfg")
 	util.Viper.AddConfigPath(".")

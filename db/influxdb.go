@@ -219,8 +219,9 @@ func writeNow(cl client.Client, bp client.BatchPoints, addr string) error {
 	//写数据库
 	if err = cl.Write(bp); err != nil { //这里会把所有有效数据添加
 		util.Log.WithFields(logrus.Fields{
-			"name": "错误",
-			"err":  err,
+			"name":   "错误",
+			"server": addr,
+			"err":    err,
 		}).Errorln("写出错了")
 		saveRecord(bp.Points(), addr) //记录错误数据
 		return err
@@ -275,9 +276,15 @@ func (idb *influxdb) Delete(cmd, db, precision string) (err error) {
 */
 func (idb *influxdb) Query(cmd, db, precision string) (res []client.Result, err error) {
 	q := client.NewQuery(cmd, db, precision)
+
 	if response, err := idb.client.Query(q); err == nil && response.Error() == nil {
+
 		return response.Results, err
 	} else {
+
+		if response.Error() != nil {
+			return nil, response.Error()
+		}
 		return nil, err
 	}
 }
@@ -292,8 +299,9 @@ func (idb *influxdb) InsertNow() error {
 	//写数据库
 	if err := idb.client.Write(idb.batchPoints); err != nil { //这里会把所有有效数据添加
 		util.Log.WithFields(logrus.Fields{
-			"name": "错误",
-			"err":  err,
+			"name":   "InsertNow错误",
+			"server": idb.addr,
+			"err":    err,
 		}).Errorln("出错了")
 		//TODO 保存数据用于回复
 		saveRecord(idb.batchPoints.Points(), idb.addr)
@@ -394,8 +402,9 @@ func (idb *influxdb) Insert(tags map[string]string, fields map[string]interface{
 	//写数据库
 	if err := idb.client.Write(bp); err != nil { //这里会把所有有效数据添加
 		util.Log.WithFields(logrus.Fields{
-			"name": "错误",
-			"err":  err,
+			"name":   "Inserts错误",
+			"server": idb.addr,
+			"err":    err,
 		}).Errorln("写出错了")
 		return err
 	}
